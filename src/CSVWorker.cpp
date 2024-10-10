@@ -14,14 +14,16 @@ bool CSVWorker::writeProfiles() {
         return false;
     }
 
-    file << "Name,Age\n";
+    file << "Name,Age,BigBlindsPerHundredHands,vPiP\n";
     for (const auto& profile : profiles) {
-        file << profile.name << ","
-             << profile.age  << "\n";
+        file << profile.name                        << ","
+             << profile.age                         << ","
+             << profile.bigBlindsPerHundredHands    << ","
+             << profile.vPiP                        << "\n";
     }
 
     file.close();
-    std::cout << "Data written to " << filename << std::endl;
+    // std::cout << "Data written to " << filename << std::endl;
     return true;
 }
 
@@ -46,11 +48,10 @@ std::vector<PlayerProfile> CSVWorker::readProfiles() {
         getline(ss, profile.name, ',');
         getline(ss, field, ',');
         profile.age = std::stoi(field);
-        getline(ss, profile.position, ',');
         getline(ss, field, ',');
-        profile.height = std::stod(field);
+        profile.bigBlindsPerHundredHands = std::stoi(field);
         getline(ss, field, ',');
-        profile.weight = std::stod(field);
+        profile.vPiP = std::stoi(field);
 
         profiles.push_back(profile);
     }
@@ -61,7 +62,20 @@ std::vector<PlayerProfile> CSVWorker::readProfiles() {
 }
 
 void CSVWorker::addProfile(const PlayerProfile& profile) {
+    this->readProfiles();
     profiles.push_back(profile);
+    this->writeProfiles();
+}
+
+void CSVWorker::updateProfile(const PlayerProfile& profile) {
+    this->readProfiles();
+    for (auto& p : profiles) {
+        if (p.name == profile.name) {
+            p = profile;
+            break;
+        }
+    }
+    this->writeProfiles();
 }
 
 const std::vector<PlayerProfile>& CSVWorker::getProfiles() const {
@@ -72,8 +86,7 @@ void CSVWorker::printProfiles() const {
     for (const auto& profile : profiles) {
         std::cout << "Name: " << profile.name
                   << ", Age: " << profile.age
-                  << ", Position: " << profile.position
-                  << ", Height: " << profile.height
-                  << ", Weight: " << profile.weight << std::endl;
+                  << ", BigBlindsPerHundredHands: " << profile.bigBlindsPerHundredHands
+                  << ", vPiP: " << profile.vPiP << std::endl;
     }
 }

@@ -7,9 +7,10 @@
 struct PlayerProfile {
     std::string name;
     int age;
-    std::string position;
-    double height;
-    double weight;
+
+    // Defining the statistics we are recording
+    int bigBlindsPerHundredHands = 0;           // BB/100
+    int vPiP = 0;                               // Voluntarily Put in Pot
 };
 
 #endif // PLAYER_PROFILE_H

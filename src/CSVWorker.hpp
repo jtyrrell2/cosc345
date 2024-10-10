@@ -14,10 +14,14 @@ private:
 
 public:
     CSVWorker(const std::string &fname);
+
     bool writeProfiles();
     std::vector<PlayerProfile> readProfiles();
-    void addProfile(const PlayerProfile &profile);
+
     const std::vector<PlayerProfile> &getProfiles() const;
+    void addProfile(const PlayerProfile &profile);
+    void updateProfile(const PlayerProfile &profile);
+    
     void printProfiles() const;
 };
 
