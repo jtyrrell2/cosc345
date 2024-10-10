@@ -6,14 +6,14 @@
 
 using namespace std;
 
-/**
- * Constructor for the Game class
- * @param players: vector<Player*>& - A vector of pointers to the players in the game
- */
 Game::Game(std::vector<Player*>& players) {
     this->players = players;
     this->deck = Deck();
     this->deck.shuffle();
+}
+
+Game::Game(std::vector<Player*>& players, PlayerProfile* currentPlayerProfile) : Game(players) {
+    this->currentPlayerProfile = currentPlayerProfile;
 }
 
 void Game::add_player(Player* player) {
@@ -408,8 +408,20 @@ bool Game::bettingRound(vector<bool>& inGame, int largestBet, int numPlayers) {
             // Get the player's move
             string move = player->getMove(canCheck, canRaise, canFold, canCall, community_cards, largestBet, numPlayersInHand);
 
-            // Perform the move for the player
+            // Recording vPiP statistic - checking if the player is HumanPlayer and has voluntarily put in pot 
+            const bool isHuman = typeid(*player) == typeid(HumanPlayer);
+            const bool isEnteredPreflop = move == "c" || move == "r";
+            if (isHuman) {
+                currentPlayerProfile->handsPlayed++;
+                if (isEnteredPreflop) {
+                    currentPlayerProfile->handsEnteredPreflop++;
+                }
 
+                // Update the vPiP statistic
+                currentPlayerProfile->vPiP = currentPlayerProfile->handsEnteredPreflop / currentPlayerProfile->handsPlayed;
+            }
+
+            // Perform the move for the player
             int betSize = makeMoveForUser(move, this->getPlayers()[currentPlayer], currentPlayer, largestBet);
             // std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 

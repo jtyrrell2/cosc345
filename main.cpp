@@ -17,6 +17,7 @@
 #include "src/GUI.hpp"
 #include "src/PlayerProfile.hpp"
 #include "src/BasicPlayer.cpp"
+#include "src/CSVWorker.hpp"
 
 using namespace std;
 
@@ -46,7 +47,7 @@ void playGame(){
     }
 
     // Initiate a game with all the players and pass game object to GUI
-    Game game = Game(playerPointers);   // i swear you have to pass a pointer, but also its a list of two players
+    Game game = Game(playerPointers, &currentPlayer);   // i swear you have to pass a pointer, but also its a list of two players
     GUI::setGame(&game);
 
     GUI::displayGameState();
@@ -54,7 +55,11 @@ void playGame(){
     // Start a game loop
     while(true){
         // Play a hand
+        currentPlayer.handsPlayed++;
         game.playHand();
+
+        CSVWorker csv("../data/profiles.csv");
+        csv.updateProfile(currentPlayer);
 
         int playerChoice = playerPointers[0]->endOfHand();
         // Check if the player wants to play another hand

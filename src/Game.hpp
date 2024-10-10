@@ -31,6 +31,7 @@ class Game {
         vector<Player*> players;
         vector<Card> community_cards = {};
         vector<int> currentBets;
+        PlayerProfile* currentPlayerProfile; 
 
         const int BIG_BLIND = 2;
         const int SMALL_BLIND = 1;
@@ -50,6 +51,12 @@ class Game {
          * @param players A vector of pointers to the players in the game.
          */
         Game(vector<Player*>& players);
+
+        /**
+         * @brief Constructs a Game object with the given players.
+         * @param players A vector of pointers to the players in the game.
+         */
+        Game(vector<Player*>& players, PlayerProfile* currentPlayerProfile);
 
         /**
          * @brief Adds a player to the game.

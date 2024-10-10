@@ -14,10 +14,12 @@ bool CSVWorker::writeProfiles() {
         return false;
     }
 
-    file << "Name,Age,BigBlindsPerHundredHands,vPiP\n";
+    file << "Name,Age,HandsPlayed,HandsEnteredPreflop,BigBlindsPerHundredHands,vPiP\n";
     for (const auto& profile : profiles) {
         file << profile.name                        << ","
              << profile.age                         << ","
+             << profile.handsPlayed                 << ","
+             << profile.handsEnteredPreflop         << ","
              << profile.bigBlindsPerHundredHands    << ","
              << profile.vPiP                        << "\n";
     }
@@ -46,10 +48,19 @@ std::vector<PlayerProfile> CSVWorker::readProfiles() {
         PlayerProfile profile;
 
         getline(ss, profile.name, ',');
+
         getline(ss, field, ',');
         profile.age = std::stoi(field);
+
+        getline(ss, field, ',');
+        profile.handsPlayed = std::stoi(field);
+
+        getline(ss, field, ',');
+        profile.handsEnteredPreflop = std::stoi(field);
+
         getline(ss, field, ',');
         profile.bigBlindsPerHundredHands = std::stoi(field);
+
         getline(ss, field, ',');
         profile.vPiP = std::stoi(field);
 
